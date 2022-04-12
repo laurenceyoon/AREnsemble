@@ -13,7 +13,7 @@ namespace UnityEngine.XR.ARFoundation.Samples
     /// and moved to the hit position.
     /// </summary>
     [RequireComponent(typeof(ARRaycastManager))]
-    public class hw1_script : MonoBehaviour
+    public class ARManager : MonoBehaviour
     {
         [SerializeField]
         [Tooltip("Instantiates this prefab on a plane at the touch location.")]
