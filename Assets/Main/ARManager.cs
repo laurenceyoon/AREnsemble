@@ -22,6 +22,7 @@ namespace UnityEngine.XR.ARFoundation.Samples
         /// <summary>
         /// The prefab to instantiate on touch.
         /// </summary>
+        /// 
         public GameObject placedPrefab
         {
             get { return m_PlacedPrefab; }
@@ -33,9 +34,12 @@ namespace UnityEngine.XR.ARFoundation.Samples
         /// </summary>
         public GameObject spawnedObject { get; private set; }
 
+        private List<FMOD.Studio.EventInstance> instances;
+
         void Awake()
         {
             m_RaycastManager = GetComponent<ARRaycastManager>();
+            instances = new List<FMOD.Studio.EventInstance>();
         }
 
         bool TryGetTouchPosition(out Vector2 touchPosition)
@@ -62,6 +66,10 @@ namespace UnityEngine.XR.ARFoundation.Samples
                 {
                     spawnedObject=Instantiate(m_PlacedPrefab, hitPose.position, hitPose.rotation);
                     spawnedObject.SetActive(true);
+                    var instance = FMODUnity.RuntimeManager.CreateInstance("event:/Test/AR-Instrument1");
+                    instance.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(spawnedObject));
+                    instance.start();
+                    instances.Add(instance);
                 }
                 else
                 {
