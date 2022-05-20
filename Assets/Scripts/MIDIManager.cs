@@ -26,7 +26,7 @@ public class MIDIManager : MonoBehaviour
     void Start()
     {
         MIDIText.text = "HELLO WORLD!";
-        midiFileLoader.MPTK_MidiName = "violin";
+        midiFileLoader.MPTK_MidiName = "example";
         // Load the MIDI file
         if (midiFileLoader.MPTK_Load())
         {
@@ -35,6 +35,10 @@ public class MIDIManager : MonoBehaviour
             List<MPTKEvent> sequence = midiFileLoader.MPTK_ReadMidiEvents();
             Debug.Log($"Loading '{midiFileLoader.MPTK_MidiName}', MIDI events count:{sequence.Count}");
             MIDIText.text = $"Loading '{midiFileLoader.MPTK_MidiName}', MIDI events count:{sequence.Count}";
+            foreach (MPTKEvent midiEvent in sequence)
+            {
+                Debug.Log($"Channel: {midiEvent.Channel}, Command: {midiEvent.Command}, Duration: {midiEvent.Duration}, Value: {midiEvent.Value}, Velocity: {midiEvent.Velocity}, RealTime: {midiEvent.RealTime}, Tick: {midiEvent.Tick}, TickTime: {midiEvent.TickTime}");
+            }
         }
         else
         {

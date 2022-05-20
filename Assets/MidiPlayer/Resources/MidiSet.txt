@@ -52,6 +52,7 @@
     <string>Eagles - Best Of My Love</string>
     <string>Everybody loves somebody sometime 1</string>
     <string>EVO - Boss Theme</string>
+    <string>example</string>
     <string>Faure - Requiem</string>
     <string>Final Fantasy - Village</string>
     <string>Fire Emblem 3 - Theme</string>
