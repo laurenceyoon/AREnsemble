@@ -21,6 +21,9 @@ namespace UnityEngine.XR.ARFoundation.Samples
         [Tooltip("Instantiates this prefab on a plane at the touch location.")]
         GameObject m_PlacedPrefab;
 
+        [SerializeField]
+        private Camera arCamera;
+
         public GameObject InstructionObject, menuObject;
         public Text InstructionText;
         private int counter=0;
@@ -51,6 +54,12 @@ namespace UnityEngine.XR.ARFoundation.Samples
         };
         private List<GameObject> InstrumentPrefabs;
 
+        public Slider instrumentSizeSlider;
+
+        private Instrument selectedInstrument=null;
+        private int selectedIndex;
+
+        private bool holding;
 
         void Awake()
         {
@@ -60,47 +69,72 @@ namespace UnityEngine.XR.ARFoundation.Samples
             counter = 0;
         }
 
-        bool TryGetTouchPosition(out Vector2 touchPosition)
+        void Update()
         {
             if (Input.touchCount > 0)
             {
-                touchPosition = Input.GetTouch(0).position;
-                return true;
+                if (Input.GetTouch(0).phase == TouchPhase.Began)
+                {
+                    Ray ray = arCamera.ScreenPointToRay(Input.GetTouch(0).position);
+                    RaycastHit hit;
+                    if (Physics.Raycast(ray, out hit))
+                    {
+                        /*
+                        var index= 0;
+                        foreach (var spwnedObject in InstrumentPrefabs)
+                        {   
+                            if (hit.transform == spawnedObject.transform)
+                            {
+                                selectedObject = spawnedObject;
+                                selectedIndex = index;
+                                holding = true;
+                            }
+                            index++;
+                        }*/
+                        selectedInstrument = hit.transform.GetComponent<Instrument>();
+                        holding = selectedInstrument != null;
+                    }
+                }
+                if (Input.GetTouch(0).phase == TouchPhase.Ended)
+                {
+                    holding = false;
+                }
             }
 
-            touchPosition = default;
-            return false;
-        }
-
-        void Update()
-        {
-            if (!TryGetTouchPosition(out Vector2 touchPosition))
-                return;
-            
-            if (!isDelay && m_RaycastManager.Raycast(touchPosition, s_Hits))
+            if (Input.touchCount > 0 && !isDelay && m_RaycastManager.Raycast(Input.GetTouch(0).position, s_Hits))
             {
                 var hitPose = s_Hits[0].pose;
-                if (counter<4)
+                if (counter < 4)
                 {
                     isDelay = true;
                     Invoke("setNextObject", 1.0f);
-                    spawnedObject =Instantiate(m_PlacedPrefab, hitPose.position, hitPose.rotation);
+                    spawnedObject = Instantiate(m_PlacedPrefab, hitPose.position, hitPose.rotation);
                     spawnedObject.SetActive(true);
                     InstrumentPrefabs.Add(spawnedObject);
-                    var instance = FMODUnity.RuntimeManager.CreateInstance("event:/Test/AR-"+ names[counter]);
+                    var instance = FMODUnity.RuntimeManager.CreateInstance("event:/Test/AR-" + names[counter]);
                     //var instance = FMODUnity.RuntimeManager.CreateInstance("event:/Test/AR-Instrument1");
+                    /*
                     instance.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(spawnedObject));
                     instance.start();
                     instance.setPaused(true);
+                    */
+                    spawnedObject.GetComponent<Instrument>().Init(instance);
                     instances.Add(instance);
                     counter++;
                 }
-                /*
                 else
                 {
-                    spawnedObject.transform.position=hitPose.position;
-                }*/
+                    if (holding)
+                        Move(hitPose.position, hitPose.rotation);
+                }
             }
+        }
+
+        void Move(Vector3 position, Quaternion rotation)
+        {
+            selectedInstrument.transform.position = position;
+            selectedInstrument.transform.rotation = rotation;
+            //instances[selectedIndex].set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(spawnedObject));
         }
 
         public void setNextObject() {
@@ -122,16 +156,23 @@ namespace UnityEngine.XR.ARFoundation.Samples
 
         public void musicStart()
         {
-            foreach (var instance in instances) {
+            /*foreach (var instance in instances) {
                 instance.setPaused(false);
+            }*/
+            foreach (var instance in InstrumentPrefabs) {
+                instance.GetComponent<Instrument>().play();
             }
         }
 
         public void musicPause()
         {
-            foreach (var instance in instances)
+            /*foreach (var instance in instances)
             {
                 instance.setPaused(true);
+            }*/
+            foreach (var instance in InstrumentPrefabs)
+            {
+                instance.GetComponent<Instrument>().pause();
             }
         }
 
