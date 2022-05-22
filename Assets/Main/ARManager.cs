@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 namespace UnityEngine.XR.ARFoundation.Samples
 {
@@ -26,7 +27,7 @@ namespace UnityEngine.XR.ARFoundation.Samples
 
         public GameObject InstructionObject, menuObject;
         public Text InstructionText;
-        private int counter=0;
+        private int counter = 0;
         private bool isDelay = false;
 
         /// <summary>
@@ -56,10 +57,14 @@ namespace UnityEngine.XR.ARFoundation.Samples
 
         public Slider instrumentSizeSlider;
 
-        private Instrument selectedInstrument=null;
+        private Instrument selectedInstrument = null;
         private int selectedIndex;
 
         private bool holding;
+
+        public Canvas m_canvas;
+        GraphicRaycaster m_gr;
+        PointerEventData m_ped;
 
         void Awake()
         {
@@ -67,6 +72,12 @@ namespace UnityEngine.XR.ARFoundation.Samples
             instances = new List<FMOD.Studio.EventInstance>();
             InstrumentPrefabs = new List<GameObject>();
             counter = 0;
+        }
+
+        private void Start()
+        {
+            m_gr = m_canvas.GetComponent<GraphicRaycaster>();
+            m_ped = new PointerEventData(null);
         }
 
         void Update()
@@ -79,24 +90,38 @@ namespace UnityEngine.XR.ARFoundation.Samples
                     RaycastHit hit;
                     if (Physics.Raycast(ray, out hit))
                     {
+                        var instrumentDetection = hit.transform.GetComponent<Instrument>();
+                        holding = instrumentDetection != null;
+                        if (holding) selectedInstrument = instrumentDetection;
                         /*
-                        var index= 0;
-                        foreach (var spwnedObject in InstrumentPrefabs)
-                        {   
-                            if (hit.transform == spawnedObject.transform)
+                        if (selectedInstrument == null )
+                        {
+                            var isTouchingSlider = false;
+                            m_ped.position = Input.GetTouch(0).position;
+                            List<RaycastResult> results = new List<RaycastResult>();
+                            m_gr.Raycast(m_ped, results);
+
+                            if (results.Count > 0)
                             {
-                                selectedObject = spawnedObject;
-                                selectedIndex = index;
-                                holding = true;
+                                if (results[0].gameObject.tag=="slider")
+                                    isTouchingSlider = true;
                             }
-                            index++;
-                        }*/
-                        selectedInstrument = hit.transform.GetComponent<Instrument>();
-                        holding = selectedInstrument != null;
+                            if (!isTouchingSlider) instrumentSizeSlider.gameObject.SetActive(false);
+                        }
+                        */
                     }
                 }
                 if (Input.GetTouch(0).phase == TouchPhase.Ended)
                 {
+                    if (holding)
+                    {
+                        instrumentSizeSlider.gameObject.SetActive(true);
+                        instrumentSizeSlider.value = (selectedInstrument.sizeScale - 0.5f) / 1.0f;
+                    }
+                    else
+                    {
+                        instrumentSizeSlider.gameObject.SetActive(false);
+                    }
                     holding = false;
                 }
             }
@@ -124,7 +149,17 @@ namespace UnityEngine.XR.ARFoundation.Samples
                 }
                 else
                 {
-                    if (holding)
+                    var isTouchingSlider = false;
+                    m_ped.position = Input.GetTouch(0).position;
+                    List<RaycastResult> results = new List<RaycastResult>();
+                    m_gr.Raycast(m_ped, results);
+
+                    if (results.Count > 0)
+                    {
+                        if (results[0].gameObject.tag == "slider")
+                            isTouchingSlider = true;
+                    }
+                    if (holding && !isTouchingSlider)
                         Move(hitPose.position, hitPose.rotation);
                 }
             }
@@ -137,7 +172,8 @@ namespace UnityEngine.XR.ARFoundation.Samples
             //instances[selectedIndex].set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(spawnedObject));
         }
 
-        public void setNextObject() {
+        public void setNextObject()
+        {
             isDelay = false;
             if (counter == 4)
             {
@@ -149,31 +185,19 @@ namespace UnityEngine.XR.ARFoundation.Samples
             }
         }
 
-        public void showMenu() {
+        public void showMenu()
+        {
             InstructionObject.SetActive(false);
             menuObject.SetActive(true);
         }
 
-        public void musicStart()
+        public void onValueChange()
         {
-            /*foreach (var instance in instances) {
-                instance.setPaused(false);
-            }*/
-            foreach (var instance in InstrumentPrefabs) {
-                instance.GetComponent<Instrument>().play();
-            }
-        }
-
-        public void musicPause()
-        {
-            /*foreach (var instance in instances)
-            {
-                instance.setPaused(true);
-            }*/
-            foreach (var instance in InstrumentPrefabs)
-            {
-                instance.GetComponent<Instrument>().pause();
-            }
+            float newScale = instrumentSizeSlider.value + 0.5f;
+            Vector3 newSize = new Vector3(newScale * selectedInstrument.originalSize.x, newScale * selectedInstrument.originalSize.y, newScale * selectedInstrument.originalSize.z);
+            selectedInstrument.sizeScale = newScale;
+            selectedInstrument.transform.localScale = newSize;
+            //InstructionText.text = selectedInstrument.name +" : "+ holding.ToString()+", "+ newScale.ToString()+", "+ instrumentSizeSlider.value.ToString();
         }
 
         static List<ARRaycastHit> s_Hits = new List<ARRaycastHit>();
