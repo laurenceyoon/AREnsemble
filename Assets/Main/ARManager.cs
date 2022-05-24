@@ -200,6 +200,21 @@ namespace UnityEngine.XR.ARFoundation.Samples
             //InstructionText.text = selectedInstrument.name +" : "+ holding.ToString()+", "+ newScale.ToString()+", "+ instrumentSizeSlider.value.ToString();
         }
 
+        public void musicPlay()
+        {
+            foreach (var instance in InstrumentPrefabs) {
+                instance.GetComponent<Instrument>().play();
+            }
+        }
+
+        public void musicPause()
+        {
+            foreach (var instance in InstrumentPrefabs)
+            {
+                instance.GetComponent<Instrument>().pause();
+            }
+        }
+
         static List<ARRaycastHit> s_Hits = new List<ARRaycastHit>();
 
         ARRaycastManager m_RaycastManager;
