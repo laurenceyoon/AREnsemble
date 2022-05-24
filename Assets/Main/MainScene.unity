@@ -1469,6 +1469,7 @@ MonoBehaviour:
   instrumentSizeSlider: {fileID: 1746144079}
   m_canvas: {fileID: 103086938}
   midiManager: {fileID: 1577749884}
+  psList: []
 --- !u!1 &1458999884
 GameObject:
   m_ObjectHideFlags: 0

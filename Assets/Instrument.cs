@@ -10,6 +10,8 @@ public class Instrument : MonoBehaviour
     public Vector3 originalSize;
     public string instrumentName;
     public List<MPTKEvent> MIDIsequence;
+    public ParticleSystem ps;
+
 
     public void Init(FMOD.Studio.EventInstance newInstance, string instrName)
     {
@@ -50,6 +52,6 @@ public class Instrument : MonoBehaviour
         yield return new WaitForSeconds(midiEvent.RealTime / 1000);
         Debug.Log(midiEvent.Value.ToString());
         // TODO: Show note visualization 
-        // transform
+        // transform, midiEvent
     }
 }

@@ -24,7 +24,7 @@ namespace UnityEngine.XR.ARFoundation.Samples
 
         [SerializeField]
         private Camera arCamera;
-
+        public List<GameObject> prefabList;
         public GameObject InstructionObject, menuObject;
         public Text InstructionText;
         private int counter = 0;
@@ -67,6 +67,8 @@ namespace UnityEngine.XR.ARFoundation.Samples
         PointerEventData m_ped;
 
         public MIDIManager midiManager;
+
+        public List<ParticleSystem> psList;
 
         void Awake()
         {
