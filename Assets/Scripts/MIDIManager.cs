@@ -21,12 +21,11 @@ public class MIDIManager : MonoBehaviour
         // When running, this component will be added to this gameObject
         midiFileLoader = gameObject.AddComponent<MidiFileLoader>();
     }
-
-    // Start is called before the first frame update
-    void Start()
+    
+    public void midiInit(Instrument instrument)
     {
         MIDIText.text = "HELLO WORLD!";
-        midiFileLoader.MPTK_MidiName = "example";
+        midiFileLoader.MPTK_MidiName = instrument.instrumentName;
         // Load the MIDI file
         if (midiFileLoader.MPTK_Load())
         {
@@ -35,10 +34,12 @@ public class MIDIManager : MonoBehaviour
             List<MPTKEvent> sequence = midiFileLoader.MPTK_ReadMidiEvents();
             Debug.Log($"Loading '{midiFileLoader.MPTK_MidiName}', MIDI events count:{sequence.Count}");
             MIDIText.text = $"Loading '{midiFileLoader.MPTK_MidiName}', MIDI events count:{sequence.Count}";
-            foreach (MPTKEvent midiEvent in sequence)
+            /*foreach (MPTKEvent midiEvent in sequence)
             {
                 Debug.Log($"Channel: {midiEvent.Channel}, Command: {midiEvent.Command}, Duration: {midiEvent.Duration}, Value: {midiEvent.Value}, Velocity: {midiEvent.Velocity}, RealTime: {midiEvent.RealTime}, Tick: {midiEvent.Tick}, TickTime: {midiEvent.TickTime}");
-            }
+                if(midiEvent.Command==MPTKCommand.NoteOn) StartCoroutine(ShowNote(midiEvent));
+            }*/
+            instrument.MIDIsequence = sequence;
         }
         else
         {

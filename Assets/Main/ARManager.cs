@@ -66,6 +66,8 @@ namespace UnityEngine.XR.ARFoundation.Samples
         GraphicRaycaster m_gr;
         PointerEventData m_ped;
 
+        public MIDIManager midiManager;
+
         void Awake()
         {
             m_RaycastManager = GetComponent<ARRaycastManager>();
@@ -137,13 +139,9 @@ namespace UnityEngine.XR.ARFoundation.Samples
                     spawnedObject.SetActive(true);
                     InstrumentPrefabs.Add(spawnedObject);
                     var instance = FMODUnity.RuntimeManager.CreateInstance("event:/Test/AR-" + names[counter]);
-                    //var instance = FMODUnity.RuntimeManager.CreateInstance("event:/Test/AR-Instrument1");
-                    /*
-                    instance.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(spawnedObject));
-                    instance.start();
-                    instance.setPaused(true);
-                    */
-                    spawnedObject.GetComponent<Instrument>().Init(instance);
+                    var instrument = spawnedObject.GetComponent<Instrument>();
+                    instrument.Init(instance, names[counter]);
+                    midiManager.midiInit(instrument);
                     instances.Add(instance);
                     counter++;
                 }
