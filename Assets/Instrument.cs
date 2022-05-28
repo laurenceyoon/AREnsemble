@@ -44,6 +44,7 @@ public class Instrument : MonoBehaviour
     private void Update()
     {
         instance.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(this.gameObject));
+        instance.setParameterByName("Size", sizeScale-0.5f);
     }
 
 
