@@ -31,6 +31,7 @@ public class MIDIManager : MonoBehaviour
         Debug.Log($"particle startSize: {particle.startSize}");
         // Debug.Log($"particle velocity: {particle.velocity}");
         Debug.Log($"particle startColor: {particle.startColor}");
+        particle.transform.position = new Vector3(100.0f, 100.0f, 0.0f);
         MIDIText.text = "HELLO WORLD!";
         midiFileLoader.MPTK_MidiName = "example";
         if (midiFileLoader.MPTK_Load())
@@ -94,8 +95,7 @@ public class MIDIManager : MonoBehaviour
         Debug.Log($"Channel: {midiEvent.Channel}, Command: {midiEvent.Command}, Duration: {midiEvent.Duration}, Value: {midiEvent.Value}, Velocity: {midiEvent.Velocity}, RealTime: {midiEvent.RealTime}, Tick: {midiEvent.Tick}, TickTime: {midiEvent.TickTime}");
         // TODO: Show note visualization
         var main = particle.main;
-        main.startSize = 1.0f;
-        particle.transform.position = new Vector3(800.0f, 400.0f, 0.0f);
+        main.startSize = 100.0f; // 0 ~ 3 사이의 값으로, velocity mapping
         // transform, midiEvent
     }
 }
