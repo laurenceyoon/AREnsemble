@@ -88,12 +88,14 @@ public class MIDIManager : MonoBehaviour
     {
 
     }
-    private IEnumerator manipulateParticle(MPTKEvent midiEvent, Particle particle)
+    private IEnumerator manipulateParticle(MPTKEvent midiEvent, ParticleSystem particle) // 추후에 Instrument을 추가 파라미터로 받아야 함
     {
         yield return new WaitForSeconds(midiEvent.RealTime / 1000);
         Debug.Log($"Channel: {midiEvent.Channel}, Command: {midiEvent.Command}, Duration: {midiEvent.Duration}, Value: {midiEvent.Value}, Velocity: {midiEvent.Velocity}, RealTime: {midiEvent.RealTime}, Tick: {midiEvent.Tick}, TickTime: {midiEvent.TickTime}");
-        // TODO: Show note visualization 
-        particle.startSize = 1.0f;
+        // TODO: Show note visualization
+        var main = particle.main;
+        main.startSize = 1.0f;
+        particle.transform.position = new Vector3(800.0f, 400.0f, 0.0f);
         // transform, midiEvent
     }
 }
