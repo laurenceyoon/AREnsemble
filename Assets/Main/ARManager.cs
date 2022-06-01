@@ -215,6 +215,25 @@ namespace UnityEngine.XR.ARFoundation.Samples
             }
         }
 
+        public void echoSmallSet(bool isOn)
+        {
+            if(isOn)
+                FMODUnity.RuntimeManager.StudioSystem.setParameterByName("Reverb", 1);
+                //Debug.Log(1.ToString());
+        }
+        public void echoMidSet(bool isOn)
+        {
+            if (isOn)
+                FMODUnity.RuntimeManager.StudioSystem.setParameterByName("Reverb", 2);
+                //Debug.Log(2.ToString());
+        }
+        public void echoBigSet(bool isOn)
+        {
+            if (isOn)
+                FMODUnity.RuntimeManager.StudioSystem.setParameterByName("Reverb", 3);
+                //Debug.Log(3.ToString());
+        }
+
         static List<ARRaycastHit> s_Hits = new List<ARRaycastHit>();
 
         ARRaycastManager m_RaycastManager;
