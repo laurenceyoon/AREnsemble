@@ -31,6 +31,14 @@
 		<property name="dryLevel">
 			<value>-80</value>
 		</property>
+		<relationship name="automators">
+			<destination>{4868cad5-6644-43db-9e89-dc6adc432d92}</destination>
+		</relationship>
 	</object>
 	<object class="MixerBusFader" id="{dc5871cd-59e1-42cd-9577-f8520bca27d6}" />
+	<object class="Automator" id="{4868cad5-6644-43db-9e89-dc6adc432d92}">
+		<property name="nameOfPropertyBeingAutomated">
+			<value>wetLevel</value>
+		</property>
+	</object>
 </objects>
