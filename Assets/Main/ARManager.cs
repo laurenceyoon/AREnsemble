@@ -142,7 +142,8 @@ namespace UnityEngine.XR.ARFoundation.Samples
                     InstrumentPrefabs.Add(spawnedObject);
                     var instance = FMODUnity.RuntimeManager.CreateInstance("event:/Test/AR-" + names[counter]);
                     var instrument = spawnedObject.GetComponent<Instrument>();
-                    instrument.Init(instance, names[counter]);
+                    var particle = psList[0];
+                    instrument.Init(instance, names[counter], particle);
                     midiManager.midiInit(instrument);
                     instances.Add(instance);
                     counter++;
