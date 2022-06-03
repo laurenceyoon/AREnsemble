@@ -137,7 +137,8 @@ namespace UnityEngine.XR.ARFoundation.Samples
                 {
                     isDelay = true;
                     Invoke("setNextObject", 1.0f);
-                    spawnedObject = Instantiate(m_PlacedPrefab, hitPose.position, hitPose.rotation);
+                    var rot = hitPose.rotation.eulerAngles + 180f * Vector3.up;
+                    spawnedObject = Instantiate(m_PlacedPrefab, hitPose.position, Quaternion.Euler(rot));
                     spawnedObject.SetActive(true);
                     InstrumentPrefabs.Add(spawnedObject);
                     var instance = FMODUnity.RuntimeManager.CreateInstance("event:/Test/AR-" + names[counter]);
