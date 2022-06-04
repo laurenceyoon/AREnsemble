@@ -11,10 +11,11 @@ public class Instrument : MonoBehaviour
     public Vector3 originalSize;
     public string instrumentName;
     public List<MPTKEvent> MIDIsequence;
-    public GameObject spawnedParticle { get; private set; }
+    public List<ParticleSystem> psList;
+    private GameObject activatedParticle;
 
 
-    public void Init(FMOD.Studio.EventInstance newInstance, string instrName, ParticleSystem particle)
+    public void Init(FMOD.Studio.EventInstance newInstance, string instrName, int particleIndex)
     {
         instance = newInstance;
         instance.start();
@@ -22,8 +23,7 @@ public class Instrument : MonoBehaviour
         sizeScale = 1;
         originalSize = transform.localScale;
         instrumentName = instrName;
-        spawnedParticle = Instantiate(particle.gameObject, transform.position, transform.rotation);
-        spawnedParticle.SetActive(true);
+        activateParticle(particleIndex);
     }
     public void play()
     {
@@ -48,7 +48,7 @@ public class Instrument : MonoBehaviour
     {
         instance.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(this.gameObject));
         instance.setParameterByName("Size", sizeScale - 0.5f);
-        spawnedParticle.transform.position = transform.position;
+        activatedParticle.transform.position = transform.position;
     }
 
 
@@ -58,12 +58,22 @@ public class Instrument : MonoBehaviour
         Debug.Log(midiEvent.Value.ToString());
         // TODO: Show note visualization
         // transform, midiEvent
-        ParticleSystem particle = spawnedParticle.GetComponent<ParticleSystem>();
+        ParticleSystem particle = activatedParticle.GetComponent<ParticleSystem>();
         var main = particle.main;
         //var shape = particle.shape;
         main.startSize = 5.0f * midiEvent.Velocity;
         //shape.radius = 2.0f * midiEvent.Velocity;
         main.startColor = new Color(0.1f * midiEvent.Velocity, 0.3f * midiEvent.Velocity, 0.4f, 0.5f);
         //main.maxParticles = (int)(0.2f * midiEvent.Velocity);
+    }
+
+    private void activateParticle(int particleIndex)
+    {
+        foreach (ParticleSystem ps in psList)
+        {
+            ps.gameObject.SetActive(false);
+        }
+        psList[particleIndex].gameObject.SetActive(true);
+        activatedParticle = psList[particleIndex].gameObject;
     }
 }
