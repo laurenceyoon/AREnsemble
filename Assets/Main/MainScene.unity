@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.4465782, g: 0.49641252, b: 0.5748167, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657815, g: 0.49641192, b: 0.57481617, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2742,7 +2742,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_PlanePrefab: {fileID: 1568414836858200, guid: d4491eeb987dcd54499729aa76a37d68, type: 3}
-  m_DetectionMode: -1
+  m_DetectionMode: 1
 --- !u!114 &1451151405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2755,7 +2755,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b46958840bb2a04a8dda4d4f06f127c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PlacedPrefab: {fileID: 9096130980213417519, guid: d95c803bef7f76846837a14905dd6c7e, type: 3}
+  m_PlacedPrefab: {fileID: 423382345283020260, guid: 5c275dece30794ad7b9b83b04c5ccd7d, type: 3}
   arCamera: {fileID: 1606721370}
   prefabList: []
   InstructionObject: {fileID: 517330566}

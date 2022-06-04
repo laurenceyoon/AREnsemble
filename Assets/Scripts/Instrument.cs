@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using MidiPlayerTK;
+using System;
 
 public class Instrument : MonoBehaviour
 {
@@ -46,7 +47,7 @@ public class Instrument : MonoBehaviour
     private void Update()
     {
         instance.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(this.gameObject));
-        instance.setParameterByName("Size", sizeScale-0.5f);
+        instance.setParameterByName("Size", sizeScale - 0.5f);
         spawnedParticle.transform.position = transform.position;
     }
 
@@ -57,8 +58,12 @@ public class Instrument : MonoBehaviour
         Debug.Log(midiEvent.Value.ToString());
         // TODO: Show note visualization
         // transform, midiEvent
-        var particle = spawnedParticle.GetComponentInParent<ParticleSystem>();
+        ParticleSystem particle = spawnedParticle.GetComponent<ParticleSystem>();
         var main = particle.main;
-        main.startSize = 500.0f;
+        //var shape = particle.shape;
+        main.startSize = 5.0f * midiEvent.Velocity;
+        //shape.radius = 2.0f * midiEvent.Velocity;
+        main.startColor = new Color(0.1f * midiEvent.Velocity, 0.3f * midiEvent.Velocity, 0.4f, 0.5f);
+        //main.maxParticles = (int)(0.2f * midiEvent.Velocity);
     }
 }

@@ -162,7 +162,10 @@ namespace UnityEngine.XR.ARFoundation.Samples
                             isTouchingSlider = true;
                     }
                     if (holding && !isTouchingSlider)
-                        Move(hitPose.position, hitPose.rotation);
+                    {
+                        var rot = hitPose.rotation.eulerAngles + 180f * Vector3.up;
+                        Move(hitPose.position, Quaternion.Euler(rot));
+                    }
                 }
             }
         }
