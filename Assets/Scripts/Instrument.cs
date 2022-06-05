@@ -61,7 +61,7 @@ public class Instrument : MonoBehaviour
         ParticleSystem particle = activatedParticle.GetComponent<ParticleSystem>();
         var main = particle.main;
         //var shape = particle.shape;
-        main.startSize = 5.0f * midiEvent.Velocity;
+        //main.startSize = 5.0f * midiEvent.Velocity; // 0 ~ 3 사이 값으로
         //shape.radius = 2.0f * midiEvent.Velocity;
         main.startColor = new Color(0.1f * midiEvent.Velocity, 0.3f * midiEvent.Velocity, 0.4f, 0.5f);
         //main.maxParticles = (int)(0.2f * midiEvent.Velocity);

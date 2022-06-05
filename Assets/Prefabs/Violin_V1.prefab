@@ -198,6 +198,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3247513679599583954, guid: d39160c35a9b340e2a8310bd4498c010, type: 3}
+      propertyPath: scalingMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3247513679599583954, guid: d39160c35a9b340e2a8310bd4498c010, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d39160c35a9b340e2a8310bd4498c010, type: 3}
 --- !u!198 &4523267474127730404 stripped
@@ -258,6 +266,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 8fb701af867a064439b417178292c28c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: 8fb701af867a064439b417178292c28c, type: 3}
+      propertyPath: scalingMode
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 19800000, guid: 8fb701af867a064439b417178292c28c, type: 3}
