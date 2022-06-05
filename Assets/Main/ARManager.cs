@@ -68,7 +68,13 @@ namespace UnityEngine.XR.ARFoundation.Samples
 
         public MIDIManager midiManager;
 
-        public List<ParticleSystem> psList;
+        //public List<ParticleSystem> psList;
+        public int particleIndex = 0;
+        private enum ParticleType
+        {
+            fxWaveC,
+            fxWaveE,
+        }
 
         void Awake()
         {
@@ -143,8 +149,7 @@ namespace UnityEngine.XR.ARFoundation.Samples
                     InstrumentPrefabs.Add(spawnedObject);
                     var instance = FMODUnity.RuntimeManager.CreateInstance("event:/Test/AR-" + names[counter]);
                     var instrument = spawnedObject.GetComponent<Instrument>();
-                    var particle = psList[0];
-                    instrument.Init(instance, names[counter], particle);
+                    instrument.Init(instance, names[counter], particleIndex);
                     midiManager.midiInit(instrument);
                     instances.Add(instance);
                     counter++;
@@ -162,7 +167,10 @@ namespace UnityEngine.XR.ARFoundation.Samples
                             isTouchingSlider = true;
                     }
                     if (holding && !isTouchingSlider)
-                        Move(hitPose.position, hitPose.rotation);
+                    {
+                        var rot = hitPose.rotation.eulerAngles + 180f * Vector3.up;
+                        Move(hitPose.position, Quaternion.Euler(rot));
+                    }
                 }
             }
         }
