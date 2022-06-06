@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using MidiPlayerTK;
+using UnityEngine.XR.ARFoundation.Samples;
 
 public class MIDIManager : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class MIDIManager : MonoBehaviour
     public MidiFileLoader midiFileLoader;
     public GameObject spawnedObject { get; private set; }
     public List<ParticleSystem> psList;
+    public ARManager arManager;
 
     private void Awake()
     {
@@ -23,39 +25,41 @@ public class MIDIManager : MonoBehaviour
         // When running, this component will be added to this gameObject
         midiFileLoader = gameObject.AddComponent<MidiFileLoader>();
 
+        arManager.initInstruments();
         // Play test MIDI for debug
-    //    Debug.Log($"psList: {psList}");
-    //    Debug.Log($"psList: {psList[0]}");
-    //    var particle = psList[0];
-    //    particle.transform.position = new Vector3(100.0f, 100.0f, 0.0f);
-    //    MIDIText.text = "HELLO WORLD!";
-    //    midiFileLoader.MPTK_MidiName = "example";
-    //    if (midiFileLoader.MPTK_Load())
-    //    {
-    //        MIDIText.text = "Load Succeed!";
-    //        // Read all MIDI events
-    //        List<MPTKEvent> sequence = midiFileLoader.MPTK_ReadMidiEvents();
-    //        Debug.Log($"Loading '{midiFileLoader.MPTK_MidiName}', MIDI events count:{sequence.Count}");
-    //        MIDIText.text = $"Loading '{midiFileLoader.MPTK_MidiName}', MIDI events count:{sequence.Count}";
-            
-    //        foreach (MPTKEvent midiEvent in sequence)
-    //        {
-    //            // Debug.Log($"Channel: {midiEvent.Channel}, Command: {midiEvent.Command}, Duration: {midiEvent.Duration}, Value: {midiEvent.Value}, Velocity: {midiEvent.Velocity}, RealTime: {midiEvent.RealTime}, Tick: {midiEvent.Tick}, TickTime: {midiEvent.TickTime}");
-    //            if (midiEvent.Command == MPTKCommand.NoteOn) StartCoroutine(manipulateParticle(midiEvent, particle));
-    //        }
-    //    }
-    //    else
-    //    {
-    //        MIDIText.text = "Load Fail!";
-    //        Debug.Log($"Loading '{midiFileLoader.MPTK_MidiName}' - Error");
-    //    }
+        //    Debug.Log($"psList: {psList}");
+        //    Debug.Log($"psList: {psList[0]}");
+        //    var particle = psList[0];
+        //    particle.transform.position = new Vector3(100.0f, 100.0f, 0.0f);
+        //    MIDIText.text = "HELLO WORLD!";
+        //    midiFileLoader.MPTK_MidiName = "example";
+        //    if (midiFileLoader.MPTK_Load())
+        //    {
+        //        MIDIText.text = "Load Succeed!";
+        //        // Read all MIDI events
+        //        List<MPTKEvent> sequence = midiFileLoader.MPTK_ReadMidiEvents();
+        //        Debug.Log($"Loading '{midiFileLoader.MPTK_MidiName}', MIDI events count:{sequence.Count}");
+        //        MIDIText.text = $"Loading '{midiFileLoader.MPTK_MidiName}', MIDI events count:{sequence.Count}";
 
-    //    ParticleSystem ps = GetComponent<ParticleSystem>();
-    //    var main = ps.main;
+        //        foreach (MPTKEvent midiEvent in sequence)
+        //        {
+        //            // Debug.Log($"Channel: {midiEvent.Channel}, Command: {midiEvent.Command}, Duration: {midiEvent.Duration}, Value: {midiEvent.Value}, Velocity: {midiEvent.Velocity}, RealTime: {midiEvent.RealTime}, Tick: {midiEvent.Tick}, TickTime: {midiEvent.TickTime}");
+        //            if (midiEvent.Command == MPTKCommand.NoteOn) StartCoroutine(manipulateParticle(midiEvent, particle));
+        //        }
+        //    }
+        //    else
+        //    {
+        //        MIDIText.text = "Load Fail!";
+        //        Debug.Log($"Loading '{midiFileLoader.MPTK_MidiName}' - Error");
+        //    }
+
+        //    ParticleSystem ps = GetComponent<ParticleSystem>();
+        //    var main = ps.main;
     }
     
     public void midiInit(Instrument instrument)
     {
+        print(instrument == null);
         MIDIText.text = "HELLO WORLD!";
         midiFileLoader.MPTK_MidiName = instrument.instrumentName;
         // Load the MIDI file

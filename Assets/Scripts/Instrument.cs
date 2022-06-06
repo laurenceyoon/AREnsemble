@@ -51,11 +51,20 @@ public class Instrument : MonoBehaviour
         activatedParticle.transform.position = transform.position;
     }
 
+    public void activate()
+    {
+        instance.setParameterByName("Active",1);
+    }
+
+    public void deactivate()
+    {
+        instance.setParameterByName("Active", 0);
+    }
 
     private IEnumerator manipulateParticle(MPTKEvent midiEvent)
     {
         yield return new WaitForSeconds(midiEvent.RealTime / 1000);
-        Debug.Log(midiEvent.Value.ToString());
+        //Debug.Log(midiEvent.Value.ToString());
         // TODO: Show note visualization
         // transform, midiEvent
         ParticleSystem particle = activatedParticle.GetComponent<ParticleSystem>();

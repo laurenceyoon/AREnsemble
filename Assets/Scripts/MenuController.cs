@@ -15,6 +15,7 @@ public class MenuController : MonoBehaviour
     public bool isInit;
     public GameObject tempDoneButton;
     public ARManager arManager;
+    private Toggle currentInstrumentToggle;
 
     private void Awake()
     {
@@ -32,12 +33,13 @@ public class MenuController : MonoBehaviour
     public void onInstrumentSettings()
     {
         instrumentSettings.SetActive(true);
+        arManager.currentState = ARManager.UserState.InstrumentSettings;
         for (int i = 0; i < 4; i++) {
             var instr=Instantiate(InstrumentTogglePrefab, InstrumentTogglePrefab.transform.parent);
             var pos = instr.transform.position;
             instr.transform.position = new Vector3(pos.x+300*i,pos.y,pos.z);
             instr.SetActive(true);
-            instr.GetComponent<InstrumentToggle>().Init(i+1);
+            instr.GetComponent<InstrumentToggle>().Init(i);
             toggleRecords.Add(instr);
         }
     }
@@ -47,6 +49,7 @@ public class MenuController : MonoBehaviour
         foreach (var instr in toggleRecords) {
             Destroy(instr);
         }
+        arManager.closeInstrumentSettings();
     }
 
     public void onArtworkSettings() {
@@ -69,8 +72,15 @@ public class MenuController : MonoBehaviour
 
     public void instrumentToggleChanged()
     {
-        Toggle activeToggle = instrumentGroup.ActiveToggles().FirstOrDefault();
+        currentInstrumentToggle = instrumentGroup.ActiveToggles().FirstOrDefault();
         //Debug.Log(activeToggle.GetComponent<InstrumentToggle>().instrumentID);
+        arManager.setSelectedInstrument(currentInstrumentToggle.GetComponent<InstrumentToggle>().instrumentID);
 
+    }
+
+    public void deselectToggle()
+    {
+        currentInstrumentToggle.isOn = false;
+        instrumentGroup.ActiveToggles().FirstOrDefault().isOn = false;
     }
 }

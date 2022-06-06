@@ -25,7 +25,7 @@ namespace UnityEngine.XR.ARFoundation.Samples
         [SerializeField]
         private Camera arCamera;
         public List<GameObject> prefabList;
-        public GameObject InstructionObject, menuObject;
+        public GameObject InstructionObject, menuObject, playButton;
         public Text InstructionText;
         private int counter = 0;
         private bool isDelay = false;
@@ -58,6 +58,7 @@ namespace UnityEngine.XR.ARFoundation.Samples
         public Slider instrumentSizeSlider;
 
         private Instrument selectedInstrument = null;
+        public Instrument toggleInstrument = null;
         private int selectedIndex;
 
         private bool holding;
@@ -78,11 +79,15 @@ namespace UnityEngine.XR.ARFoundation.Samples
 
         public enum UserState {
             Initializing,
+            Ready,
             Playing,
             InstrumentSettings
         }
 
         public UserState currentState;
+
+        public MenuController menuController;
+        public GameObject InstrumentDeactivateButton;
 
         void Awake()
         {
@@ -91,6 +96,22 @@ namespace UnityEngine.XR.ARFoundation.Samples
             InstrumentPrefabs = new List<GameObject>();
             counter = 0;
             currentState = UserState.Initializing;
+            
+        }
+
+        public void initInstruments() {
+            for (int i = 0; i < 4; i++)
+            {
+                Debug.Log(i);
+                spawnedObject = Instantiate(m_PlacedPrefab);
+                spawnedObject.SetActive(true);
+                InstrumentPrefabs.Add(spawnedObject);
+                var instance = FMODUnity.RuntimeManager.CreateInstance("event:/Test/AR-" + names[i]);
+                var instrument = spawnedObject.GetComponent<Instrument>();
+                instrument.Init(instance, names[i], particleIndex);
+                midiManager.midiInit(instrument);
+                instances.Add(instance);
+            }
         }
 
         private void Start()
@@ -101,8 +122,21 @@ namespace UnityEngine.XR.ARFoundation.Samples
 
         void Update()
         {
-            if (Input.touchCount > 0)
+            if (Input.touchCount > 0 && currentState == UserState.InstrumentSettings)
             {
+                InstructionText.text = Input.GetTouch(0).position.ToString();
+                if (toggleInstrument != null && m_RaycastManager.Raycast(Input.GetTouch(0).position, s_Hits) && Input.GetTouch(0).position.y>450 && Input.GetTouch(0).position.y < 2000)
+                {
+                    var hitPose = s_Hits[0].pose;
+                    var rot = hitPose.rotation.eulerAngles + 180f * Vector3.up;
+                    toggleInstrument.gameObject.SetActive(true);
+                    toggleInstrument.transform.position = hitPose.position;
+                    toggleInstrument.transform.rotation = Quaternion.Euler(rot);
+                    toggleInstrument.activate();
+                    toggleInstrument = null;
+                    menuController.deselectToggle();
+                }
+
                 if (Input.GetTouch(0).phase == TouchPhase.Began)
                 {
                     Ray ray = arCamera.ScreenPointToRay(Input.GetTouch(0).position);
@@ -119,36 +153,19 @@ namespace UnityEngine.XR.ARFoundation.Samples
                     if (holding)
                     {
                         instrumentSizeSlider.gameObject.SetActive(true);
+                        InstrumentDeactivateButton.SetActive(true);
                         instrumentSizeSlider.value = (selectedInstrument.sizeScale - 0.5f) / 1.0f;
                     }
                     else
                     {
+                        InstrumentDeactivateButton.SetActive(false);
                         instrumentSizeSlider.gameObject.SetActive(false);
                     }
                     holding = false;
                 }
-            }
-
-            if (Input.touchCount > 0 && !isDelay && m_RaycastManager.Raycast(Input.GetTouch(0).position, s_Hits))
-            {
-                var hitPose = s_Hits[0].pose;
-                if (counter < 4)
+                if (m_RaycastManager.Raycast(Input.GetTouch(0).position, s_Hits))
                 {
-                    isDelay = true;
-                    Invoke("setNextObject", 1.0f);
-                    var rot = hitPose.rotation.eulerAngles + 180f * Vector3.up;
-                    spawnedObject = Instantiate(m_PlacedPrefab, hitPose.position, Quaternion.Euler(rot));
-                    spawnedObject.SetActive(true);
-                    InstrumentPrefabs.Add(spawnedObject);
-                    var instance = FMODUnity.RuntimeManager.CreateInstance("event:/Test/AR-" + names[counter]);
-                    var instrument = spawnedObject.GetComponent<Instrument>();
-                    instrument.Init(instance, names[counter], particleIndex);
-                    midiManager.midiInit(instrument);
-                    instances.Add(instance);
-                    counter++;
-                }
-                else
-                {
+                    var hitPose = s_Hits[0].pose;
                     var isTouchingSlider = false;
                     m_ped.position = Input.GetTouch(0).position;
                     List<RaycastResult> results = new List<RaycastResult>();
@@ -208,6 +225,7 @@ namespace UnityEngine.XR.ARFoundation.Samples
             foreach (var instance in InstrumentPrefabs) {
                 instance.GetComponent<Instrument>().play();
             }
+            playButton.SetActive(false);
         }
 
         public void musicPause()
@@ -235,6 +253,25 @@ namespace UnityEngine.XR.ARFoundation.Samples
             if (isOn)
                 FMODUnity.RuntimeManager.StudioSystem.setParameterByName("Reverb", 3);
                 //Debug.Log(3.ToString());
+        }
+
+        public void setSelectedInstrument(int id) {
+            toggleInstrument = InstrumentPrefabs[id].GetComponent<Instrument>();
+            //selectedInstrument.play();
+        }
+
+        public void closeInstrumentSettings()
+        {
+            currentState = ARManager.UserState.Playing;
+            instrumentSizeSlider.gameObject.SetActive(false);
+        }
+
+        public void deactivateInstrument()
+        {
+            instrumentSizeSlider.gameObject.SetActive(false);
+            InstrumentDeactivateButton.SetActive(false);
+            selectedInstrument.deactivate();
+            selectedInstrument.gameObject.SetActive(false);
         }
 
         static List<ARRaycastHit> s_Hits = new List<ARRaycastHit>();
