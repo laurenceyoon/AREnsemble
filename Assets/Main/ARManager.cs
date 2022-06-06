@@ -102,7 +102,7 @@ namespace UnityEngine.XR.ARFoundation.Samples
         public void initInstruments() {
             for (int i = 0; i < 4; i++)
             {
-                Debug.Log(i);
+                //Debug.Log(i);
                 spawnedObject = Instantiate(prefabList[i]);
                 spawnedObject.SetActive(true);
                 InstrumentPrefabs.Add(spawnedObject);
@@ -264,6 +264,7 @@ namespace UnityEngine.XR.ARFoundation.Samples
         {
             currentState = ARManager.UserState.Playing;
             instrumentSizeSlider.gameObject.SetActive(false);
+            InstrumentDeactivateButton.SetActive(false);
         }
 
         public void deactivateInstrument()
