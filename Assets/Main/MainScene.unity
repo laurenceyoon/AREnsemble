@@ -4700,7 +4700,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PlacedPrefab: {fileID: 423382345283020260, guid: 5c275dece30794ad7b9b83b04c5ccd7d, type: 3}
   arCamera: {fileID: 1606721370}
-  prefabList: []
+  prefabList:
+  - {fileID: 423382345283020260, guid: 5c275dece30794ad7b9b83b04c5ccd7d, type: 3}
+  - {fileID: 6538700452874183490, guid: dbeaac8845999401c8ddbb127c424e77, type: 3}
+  - {fileID: 8980008514063526673, guid: 44b52140e71df4103a0749d1fd987533, type: 3}
+  - {fileID: 8946155739117956657, guid: 8f478f3d6efd448bdbcb1c3dd658e04b, type: 3}
   InstructionObject: {fileID: 517330566}
   menuObject: {fileID: 185696480}
   playButton: {fileID: 318707647}

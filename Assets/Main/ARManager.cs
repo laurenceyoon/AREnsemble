@@ -103,7 +103,7 @@ namespace UnityEngine.XR.ARFoundation.Samples
             for (int i = 0; i < 4; i++)
             {
                 Debug.Log(i);
-                spawnedObject = Instantiate(m_PlacedPrefab);
+                spawnedObject = Instantiate(prefabList[i]);
                 spawnedObject.SetActive(true);
                 InstrumentPrefabs.Add(spawnedObject);
                 var instance = FMODUnity.RuntimeManager.CreateInstance("event:/Test/AR-" + names[i]);
