@@ -76,12 +76,21 @@ namespace UnityEngine.XR.ARFoundation.Samples
             fxWaveE,
         }
 
+        public enum UserState {
+            Initializing,
+            Playing,
+            InstrumentSettings
+        }
+
+        public UserState currentState;
+
         void Awake()
         {
             m_RaycastManager = GetComponent<ARRaycastManager>();
             instances = new List<FMOD.Studio.EventInstance>();
             InstrumentPrefabs = new List<GameObject>();
             counter = 0;
+            currentState = UserState.Initializing;
         }
 
         private void Start()
@@ -103,22 +112,6 @@ namespace UnityEngine.XR.ARFoundation.Samples
                         var instrumentDetection = hit.transform.GetComponent<Instrument>();
                         holding = instrumentDetection != null;
                         if (holding) selectedInstrument = instrumentDetection;
-                        /*
-                        if (selectedInstrument == null )
-                        {
-                            var isTouchingSlider = false;
-                            m_ped.position = Input.GetTouch(0).position;
-                            List<RaycastResult> results = new List<RaycastResult>();
-                            m_gr.Raycast(m_ped, results);
-
-                            if (results.Count > 0)
-                            {
-                                if (results[0].gameObject.tag=="slider")
-                                    isTouchingSlider = true;
-                            }
-                            if (!isTouchingSlider) instrumentSizeSlider.gameObject.SetActive(false);
-                        }
-                        */
                     }
                 }
                 if (Input.GetTouch(0).phase == TouchPhase.Ended)
