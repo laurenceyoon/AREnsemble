@@ -60,15 +60,7 @@ namespace UnityEngine.XR.ARFoundation.Samples
         PointerEventData m_ped;
 
         public MIDIManager midiManager;
-
-        //public List<ParticleSystem> psList;
         public int particleIndex = 0;
-        private enum ParticleType
-        {
-            fxWaveC,
-            fxWaveE,
-        }
-
         public enum UserState {
             Initializing,
             Ready,
@@ -115,7 +107,7 @@ namespace UnityEngine.XR.ARFoundation.Samples
         {
             if (Input.touchCount > 0 && currentState == UserState.InstrumentSettings)
             {
-                InstructionText.text = Input.GetTouch(0).position.ToString();
+                //InstructionText.text = Input.GetTouch(0).position.ToString();
                 if (toggleInstrument != null && m_RaycastManager.Raycast(Input.GetTouch(0).position, s_Hits) && Input.GetTouch(0).position.y>450 && Input.GetTouch(0).position.y < 2000)
                 {
                     var hitPose = s_Hits[0].pose;

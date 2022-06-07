@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.4465782, g: 0.49641252, b: 0.5748167, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657815, g: 0.49641192, b: 0.57481617, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4779,8 +4779,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   arCamera: {fileID: 1606721370}
   prefabList:
-  - {fileID: 423382345283020260, guid: 5c275dece30794ad7b9b83b04c5ccd7d, type: 3}
-  - {fileID: 6538700452874183490, guid: dbeaac8845999401c8ddbb127c424e77, type: 3}
+  - {fileID: 2662700265822906702, guid: d6b36797191fc43f4912d1fe94aeb753, type: 3}
+  - {fileID: 4952055998073154422, guid: dbeaac8845999401c8ddbb127c424e77, type: 3}
   - {fileID: 8980008514063526673, guid: 44b52140e71df4103a0749d1fd987533, type: 3}
   - {fileID: 8946155739117956657, guid: 8f478f3d6efd448bdbcb1c3dd658e04b, type: 3}
   InstructionObject: {fileID: 517330566}
