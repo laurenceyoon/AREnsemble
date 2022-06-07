@@ -13,7 +13,7 @@ public class Instrument : MonoBehaviour
     public List<MPTKEvent> MIDIsequence;
     public List<ParticleSystem> psList;
     private GameObject activatedParticle;
-
+    private int psIndex;
 
     public void Init(FMOD.Studio.EventInstance newInstance, string instrName, int particleIndex)
     {
@@ -23,11 +23,13 @@ public class Instrument : MonoBehaviour
         sizeScale = 1;
         originalSize = transform.localScale;
         instrumentName = instrName;
-        activateParticle(particleIndex);
+        psIndex = particleIndex;
+        deactivateParticle();
     }
     public void play()
     {
         instance.setPaused(false);
+        activateParticle();
         foreach (MPTKEvent midiEvent in MIDIsequence)
         {
             Debug.Log($"Channel: {midiEvent.Channel}, Command: {midiEvent.Command}, Duration: {midiEvent.Duration}, Value: {midiEvent.Value}, Velocity: {midiEvent.Velocity}, RealTime: {midiEvent.RealTime}, Tick: {midiEvent.Tick}, TickTime: {midiEvent.TickTime}");
@@ -38,6 +40,7 @@ public class Instrument : MonoBehaviour
     public void pause()
     {
         instance.setPaused(true);
+        deactivateParticle();
     }
 
     /* public void move(FMOD.ATTRIBUTES_3D loc)
@@ -75,13 +78,18 @@ public class Instrument : MonoBehaviour
         shape.radius = 0.01f * midiEvent.Value;
     }
 
-    private void activateParticle(int particleIndex)
+    private void activateParticle()
+    {
+        deactivateParticle();
+        psList[psIndex].gameObject.SetActive(true);
+        activatedParticle = psList[psIndex].gameObject;
+    }
+
+    private void deactivateParticle()
     {
         foreach (ParticleSystem ps in psList)
         {
             ps.gameObject.SetActive(false);
         }
-        psList[particleIndex].gameObject.SetActive(true);
-        activatedParticle = psList[particleIndex].gameObject;
     }
 }

@@ -19,26 +19,12 @@ namespace UnityEngine.XR.ARFoundation.Samples
     public class ARManager : MonoBehaviour
     {
         [SerializeField]
-        [Tooltip("Instantiates this prefab on a plane at the touch location.")]
-        GameObject m_PlacedPrefab;
-
-        [SerializeField]
         private Camera arCamera;
         public List<GameObject> prefabList;
         public GameObject InstructionObject, menuObject, playButton;
         public Text InstructionText;
         private int counter = 0;
         private bool isDelay = false;
-
-        /// <summary>
-        /// The prefab to instantiate on touch.
-        /// </summary>
-        /// 
-        public GameObject placedPrefab
-        {
-            get { return m_PlacedPrefab; }
-            set { m_PlacedPrefab = value; }
-        }
 
         /// <summary>
         /// The object instantiated as a result of a successful raycast intersection with a plane.
@@ -67,8 +53,6 @@ namespace UnityEngine.XR.ARFoundation.Samples
         private Instrument selectedInstrument = null;
         public Instrument toggleInstrument = null;
         private int toggleID;
-        private int selectedIndex;
-
         private bool holding;
 
         public Canvas m_canvas;
@@ -202,7 +186,6 @@ namespace UnityEngine.XR.ARFoundation.Samples
         {
             selectedInstrument.transform.position = position;
             selectedInstrument.transform.rotation = rotation;
-            //instances[selectedIndex].set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(spawnedObject));
         }
 
         public void setNextObject()
