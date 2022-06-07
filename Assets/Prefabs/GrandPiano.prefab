@@ -7309,7 +7309,7 @@ Transform:
   m_GameObject: {fileID: 8946155739117956657}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
   m_Children:
   - {fileID: 8460113782896691036}
   - {fileID: 2194905030959969708}
@@ -7495,8 +7495,8 @@ MonoBehaviour:
   originalSize: {x: 0, y: 0, z: 0}
   instrumentName: 
   psList:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 703081168545444870}
+  - {fileID: 2522755761381847234}
 --- !u!65 &2464945632623874083
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7815,6 +7815,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 8fb701af867a064439b417178292c28c, type: 3}
   m_PrefabInstance: {fileID: 2522755761395871490}
   m_PrefabAsset: {fileID: 0}
+--- !u!198 &2522755761381847234 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 19800000, guid: 8fb701af867a064439b417178292c28c, type: 3}
+  m_PrefabInstance: {fileID: 2522755761395871490}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2652801485194901204
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7875,5 +7880,10 @@ PrefabInstance:
 --- !u!4 &703081168526045510 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3247513679585429394, guid: d39160c35a9b340e2a8310bd4498c010, type: 3}
+  m_PrefabInstance: {fileID: 2652801485194901204}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &703081168545444870 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 3247513679599583954, guid: d39160c35a9b340e2a8310bd4498c010, type: 3}
   m_PrefabInstance: {fileID: 2652801485194901204}
   m_PrefabAsset: {fileID: 0}

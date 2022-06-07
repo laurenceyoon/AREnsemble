@@ -53,12 +53,20 @@ namespace UnityEngine.XR.ARFoundation.Samples
             "Cello",
             "Piano"
         };
+        private List<float> rotDeg = new List<float>()
+        {
+            180f,
+            180f,
+            180f,
+            0f
+        };
         private List<GameObject> InstrumentPrefabs;
 
         public Slider instrumentSizeSlider;
 
         private Instrument selectedInstrument = null;
         public Instrument toggleInstrument = null;
+        private int toggleID;
         private int selectedIndex;
 
         private bool holding;
@@ -104,7 +112,7 @@ namespace UnityEngine.XR.ARFoundation.Samples
             {
                 //Debug.Log(i);
                 spawnedObject = Instantiate(prefabList[i]);
-                spawnedObject.SetActive(true);
+                spawnedObject.SetActive(false);
                 InstrumentPrefabs.Add(spawnedObject);
                 var instance = FMODUnity.RuntimeManager.CreateInstance("event:/Test/AR-" + names[i]);
                 var instrument = spawnedObject.GetComponent<Instrument>();
@@ -128,7 +136,7 @@ namespace UnityEngine.XR.ARFoundation.Samples
                 if (toggleInstrument != null && m_RaycastManager.Raycast(Input.GetTouch(0).position, s_Hits) && Input.GetTouch(0).position.y>450 && Input.GetTouch(0).position.y < 2000)
                 {
                     var hitPose = s_Hits[0].pose;
-                    var rot = hitPose.rotation.eulerAngles + 180f * Vector3.up;
+                    var rot = hitPose.rotation.eulerAngles + rotDeg[toggleID] * Vector3.up;
                     toggleInstrument.gameObject.SetActive(true);
                     toggleInstrument.transform.position = hitPose.position;
                     toggleInstrument.transform.rotation = Quaternion.Euler(rot);
@@ -145,7 +153,11 @@ namespace UnityEngine.XR.ARFoundation.Samples
                     {
                         var instrumentDetection = hit.transform.GetComponent<Instrument>();
                         holding = instrumentDetection != null;
-                        if (holding) selectedInstrument = instrumentDetection;
+                        if (holding)
+                        {
+                            selectedInstrument = instrumentDetection;
+                            toggleID = InstrumentPrefabs.FindIndex(obj=>obj==selectedInstrument.gameObject);
+                        }
                     }
                 }
                 if (Input.GetTouch(0).phase == TouchPhase.Ended)
@@ -178,16 +190,12 @@ namespace UnityEngine.XR.ARFoundation.Samples
                     }
                     if (holding && !isTouchingSlider)
                     {
-                        var rot = hitPose.rotation.eulerAngles + 180f * Vector3.up;
+                        var rot = hitPose.rotation.eulerAngles + rotDeg[toggleID] * Vector3.up;
                         Move(hitPose.position, Quaternion.Euler(rot));
                     }
                 }
             }
-
-            foreach (var plane in transform.GetComponent<ARPlaneManager>().trackables) {
-                plane.gameObject.SetActive(currentState==UserState.InstrumentSettings);
-            }
-
+            transform.GetComponent<ARPlaneManager>().SetTrackablesActive(currentState == UserState.InstrumentSettings);
         }
 
         void Move(Vector3 position, Quaternion rotation)
@@ -262,6 +270,7 @@ namespace UnityEngine.XR.ARFoundation.Samples
 
         public void setSelectedInstrument(int id) {
             toggleInstrument = InstrumentPrefabs[id].GetComponent<Instrument>();
+            toggleID = id;
             //selectedInstrument.play();
         }
 
