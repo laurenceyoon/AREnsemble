@@ -183,6 +183,11 @@ namespace UnityEngine.XR.ARFoundation.Samples
                     }
                 }
             }
+
+            foreach (var plane in transform.GetComponent<ARPlaneManager>().trackables) {
+                plane.gameObject.SetActive(currentState==UserState.InstrumentSettings);
+            }
+
         }
 
         void Move(Vector3 position, Quaternion rotation)
