@@ -24,12 +24,11 @@ public class Instrument : MonoBehaviour
         originalSize = transform.localScale;
         instrumentName = instrName;
         psIndex = particleIndex;
-        deactivateParticle();
+        deactivateAllParticle();
     }
     public void play()
     {
         instance.setPaused(false);
-        activateParticle();
         foreach (MPTKEvent midiEvent in MIDIsequence)
         {
             Debug.Log($"Channel: {midiEvent.Channel}, Command: {midiEvent.Command}, Duration: {midiEvent.Duration}, Value: {midiEvent.Value}, Velocity: {midiEvent.Velocity}, RealTime: {midiEvent.RealTime}, Tick: {midiEvent.Tick}, TickTime: {midiEvent.TickTime}");
@@ -40,7 +39,7 @@ public class Instrument : MonoBehaviour
     public void pause()
     {
         instance.setPaused(true);
-        deactivateParticle();
+        deactivateAllParticle();
     }
 
     /* public void move(FMOD.ATTRIBUTES_3D loc)
@@ -67,25 +66,25 @@ public class Instrument : MonoBehaviour
     private IEnumerator manipulateParticle(MPTKEvent midiEvent)
     {
         yield return new WaitForSeconds(midiEvent.RealTime / 1000);
-        //Debug.Log(midiEvent.Value.ToString());
-        // TODO: Show note visualization
-        // transform, midiEvent
+        if (activatedParticle == null)
+            activateParticle();
+
         ParticleSystem particle = activatedParticle.GetComponent<ParticleSystem>();
         var main = particle.main;
         var shape = particle.shape;
         main.startColor = new Color(0.1f * midiEvent.Velocity, 0.3f * midiEvent.Velocity, 0.4f, 0.5f);
         main.maxParticles = (int)(0.5f*midiEvent.Value);
-        shape.radius = 0.01f * midiEvent.Value;
+        shape.radius = 0.003f * midiEvent.Value;
     }
 
     private void activateParticle()
     {
-        deactivateParticle();
+        deactivateAllParticle();
         psList[psIndex].gameObject.SetActive(true);
         activatedParticle = psList[psIndex].gameObject;
     }
 
-    private void deactivateParticle()
+    private void deactivateAllParticle()
     {
         foreach (ParticleSystem ps in psList)
         {

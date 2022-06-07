@@ -94,7 +94,6 @@ namespace UnityEngine.XR.ARFoundation.Samples
         public void initInstruments() {
             for (int i = 0; i < 4; i++)
             {
-                //Debug.Log(i);
                 spawnedObject = Instantiate(prefabList[i]);
                 spawnedObject.SetActive(false);
                 InstrumentPrefabs.Add(spawnedObject);
