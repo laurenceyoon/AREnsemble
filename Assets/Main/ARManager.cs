@@ -24,7 +24,6 @@ namespace UnityEngine.XR.ARFoundation.Samples
         public GameObject InstructionObject, menuObject, playButton;
         public Text InstructionText;
         private int counter = 0;
-        private bool isDelay = false;
 
         /// <summary>
         /// The object instantiated as a result of a successful raycast intersection with a plane.
@@ -181,7 +180,6 @@ namespace UnityEngine.XR.ARFoundation.Samples
 
         public void setNextObject()
         {
-            isDelay = false;
             if (counter == 4)
             {
                 showMenu();

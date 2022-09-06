@@ -82,6 +82,7 @@ public class Instrument : MonoBehaviour
     }
     public void play()
     {
+        // instance.start();
         instance.setPaused(false);
         foreach (MPTKEvent midiEvent in MIDIsequence)
         {
